@@ -2,12 +2,12 @@ package hello.controller;
 
 import hello.entity.Result;
 import hello.entity.User;
+import hello.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +21,13 @@ import java.util.Map;
 @Controller
 public class AuthController {
 
-    private UserDetailsService userDetailsService;
+    private UserService userService;
     private AuthenticationManager authenticationManager;
 
     @Inject
-    public AuthController(UserDetailsService userDetailsService,
+    public AuthController(UserService userService,
                           AuthenticationManager authenticationManager) {
-        this.userDetailsService = userDetailsService;
+        this.userService = userService;
         this.authenticationManager = authenticationManager;
     }
 
@@ -35,7 +35,17 @@ public class AuthController {
     @GetMapping("/auth")
     @ResponseBody
     public Result auth(){
-        return new Result("ok","登录成功",true);
+
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("userName = " + userName);
+        User loggedInUser = userService.getUserByUsername(userName);
+
+        if(loggedInUser==null){
+            return new Result("ok","用户没有登录",false);
+        }else{
+            return new Result("ok",null,true,userService.getUserByUsername(userName));
+
+        }
     }
 
     @PostMapping("/auth/login")
@@ -48,7 +58,7 @@ public class AuthController {
         UserDetails userDetails = null;
         try{
             System.out.println(1);
-            userDetails = userDetailsService.loadUserByUsername(username);
+            userDetails = userService.loadUserByUsername(username);
 
         }catch(UsernameNotFoundException e){
             return new Result("fail","用户不存在",false);
@@ -63,8 +73,7 @@ public class AuthController {
             // 设置cookie
             SecurityContextHolder.getContext().setAuthentication(token);
             // 返回前端所需要的数据
-            User loggedInUser = new User(1,"张三");
-            return new Result("ok","登录成功",true,loggedInUser);
+            return new Result("ok","登录成功",true,userService.getUserByUsername(username));
         }catch (BadCredentialsException e){
             System.out.println("error");
            return new Result("fail","密码不正确",false);
