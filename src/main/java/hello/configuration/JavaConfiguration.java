@@ -1,5 +1,6 @@
 package hello.configuration;
 
+import hello.mapper.UserMapper;
 import hello.service.OrderService;
 import hello.service.UserService;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,7 @@ public class JavaConfiguration {
 //    }
 
     @Bean
-    public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder){
-        return new UserService(bCryptPasswordEncoder);
+    public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder, UserMapper userMapper){
+        return new UserService(bCryptPasswordEncoder,userMapper);
     }
 }

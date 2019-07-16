@@ -12,13 +12,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.inject.Inject;
+
 // 鉴权  https://spring.io/guides/gs/securing-web/
 // 会拦截所有的请求
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
+    @Inject
     UserDetailsService userDetailsService;
 
 

@@ -57,14 +57,12 @@ public class AuthController {
 
         UserDetails userDetails = null;
         try{
-            System.out.println(1);
             userDetails = userService.loadUserByUsername(username);
 
         }catch(UsernameNotFoundException e){
             return new Result("fail","用户不存在",false);
-
         }
-        System.out.println(2);
+
         UsernamePasswordAuthenticationToken token =new UsernamePasswordAuthenticationToken(userDetails,password,userDetails.getAuthorities());
 
         try{
