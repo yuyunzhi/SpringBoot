@@ -10,10 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -32,11 +29,14 @@ public class AuthController {
     }
 
 
+
     @GetMapping("/auth")
     @ResponseBody
     public Result auth(){
 
+        // 获取cookie
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+
         System.out.println("userName = " + userName);
         User loggedInUser = userService.getUserByUsername(userName);
 
@@ -47,6 +47,53 @@ public class AuthController {
 
         }
     }
+
+
+    @GetMapping("/auth/logout")
+    @ResponseBody
+    public Result logout(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User loggedInUser = userService.getUserByUsername(username);
+
+        if(loggedInUser==null){
+            return new Result("fail","用户没有登录",false);
+
+        }else{
+            SecurityContextHolder.clearContext();
+            return new Result("ok","注销成功",false);
+        }
+
+    }
+
+    @PostMapping("/auth/register")
+    @ResponseBody
+    public Result register(@RequestBody Map<String,String> usernameAndPasswordJson){
+        String username = usernameAndPasswordJson.get("username");
+        String password = usernameAndPasswordJson.get("password");
+
+        if(username == null || password == null){
+            return new Result("fail","密码或用户名为空",false);
+        }
+
+        if(username.length()<1 || username.length()>15){
+            return new Result("fail","用户名长度不符合规定",false);
+        }
+
+        if(password.length()<1 || password.length()>15){
+            return new Result("fail","密码长度不符合规定",false);
+        }
+
+        User user = userService.getUserByUsername(username);
+
+        if(user==null){
+            userService.save(username,password);
+            return new Result("ok","注册成功",false);
+        }else{
+            return new Result("fail","用户已经存在",false);
+        }
+    }
+
 
     @PostMapping("/auth/login")
     @ResponseBody
