@@ -17,6 +17,19 @@ public class Result {
         this.data = data;
     }
 
+    public static Result failure(String message){
+        return new Result("fail",message,false);
+    }
+
+    public static Result successLogin(String message,User user){
+        return new Result("ok",message,true,user);
+    }
+
+    public static Result success(String message){
+        return new Result("ok",message,false);
+    }
+
+
     public String getStatus() {
         return status;
     }

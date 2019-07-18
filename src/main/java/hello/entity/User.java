@@ -1,5 +1,7 @@
 package hello.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.Instant;
 
 public class User {
@@ -8,6 +10,7 @@ public class User {
     String avatar;
     Instant createdAt;
     Instant updateAt;
+    @JsonIgnore
     String encryptedPassword;
 
     public User(Integer id, String username,String encryptedPassword) {

@@ -21,7 +21,6 @@ public class UserService implements UserDetailsService {
                        UserMapper userMapper) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userMapper=userMapper;
-        //save("user","user");
     }
 
     public void save(String username, String password){
@@ -44,10 +43,5 @@ public class UserService implements UserDetailsService {
 
        return new org.springframework.security.core.userdetails.User(username,user.getEncryptedPassword(), Collections.emptyList());
     }
-
-//    public User getUserById(Integer id){
-//        return null;
-//    }
-
 
 }

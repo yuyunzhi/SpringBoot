@@ -3,6 +3,7 @@ package hello.controller;
 import hello.entity.Result;
 import hello.entity.User;
 import hello.service.UserService;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,14 +38,12 @@ public class AuthController {
         // 获取cookie
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        System.out.println("userName = " + userName);
         User loggedInUser = userService.getUserByUsername(userName);
 
         if(loggedInUser==null){
-            return new Result("ok","用户没有登录",false);
+            return Result.success("用户没有登录");
         }else{
-            return new Result("ok",null,true,userService.getUserByUsername(userName));
-
+            return Result.successLogin(null,userService.getUserByUsername(userName));
         }
     }
 
@@ -57,11 +56,11 @@ public class AuthController {
         User loggedInUser = userService.getUserByUsername(username);
 
         if(loggedInUser==null){
-            return new Result("fail","用户没有登录",false);
+            return Result.failure("用户没有登录");
 
         }else{
             SecurityContextHolder.clearContext();
-            return new Result("ok","注销成功",false);
+            return Result.success("注销成功");
         }
 
     }
@@ -73,25 +72,34 @@ public class AuthController {
         String password = usernameAndPasswordJson.get("password");
 
         if(username == null || password == null){
-            return new Result("fail","密码或用户名为空",false);
+            return Result.failure("密码或用户名为空");
         }
 
         if(username.length()<1 || username.length()>15){
-            return new Result("fail","用户名长度不符合规定",false);
+            return Result.failure("用户名长度不符合规定");
         }
 
         if(password.length()<1 || password.length()>15){
-            return new Result("fail","密码长度不符合规定",false);
+            return Result.failure("密码长度不符合规定");
+
         }
 
-        User user = userService.getUserByUsername(username);
+        //  并发出现 潜在问题  所以不使用以下逻辑
+//        User user = userService.getUserByUsername(username);
+//
+//        if(user==null){
+//            userService.save(username,password);
+//            return new Result("ok","注册成功",false);
+//        }else{
+//            return new Result("fail","用户已经存在",false);
+//        }
 
-        if(user==null){
+        try{
             userService.save(username,password);
-            return new Result("ok","注册成功",false);
-        }else{
-            return new Result("fail","用户已经存在",false);
+        }catch (DuplicateKeyException e){
+            return Result.failure("用户已经存在");
         }
+        return Result.success("注册成功");
     }
 
 
@@ -107,7 +115,7 @@ public class AuthController {
             userDetails = userService.loadUserByUsername(username);
 
         }catch(UsernameNotFoundException e){
-            return new Result("fail","用户不存在",false);
+            return Result.failure("用户不存在");
         }
 
         UsernamePasswordAuthenticationToken token =new UsernamePasswordAuthenticationToken(userDetails,password,userDetails.getAuthorities());
@@ -118,10 +126,10 @@ public class AuthController {
             // 设置cookie
             SecurityContextHolder.getContext().setAuthentication(token);
             // 返回前端所需要的数据
-            return new Result("ok","登录成功",true,userService.getUserByUsername(username));
+            return Result.successLogin("登录成功",userService.getUserByUsername(username));
+
         }catch (BadCredentialsException e){
-            System.out.println("error");
-           return new Result("fail","密码不正确",false);
+            return Result.failure("密码不正确");
 
         }
     }

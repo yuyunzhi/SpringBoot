@@ -11,9 +11,5 @@ public class OrderService {
         this.userService=userService;
     }
 
-    public OrderService() { }
 
-//    public void placeOrder(Integer userId,String item){
-//        userService.getUserById(userId);
-//    }
 }
