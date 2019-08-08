@@ -28,7 +28,6 @@ public class UserService implements UserDetailsService {
  }
 
     public User getUserByUsername(String username){
-
         return userMapper.findUserByUsername(username);
     }
 
@@ -38,7 +37,6 @@ public class UserService implements UserDetailsService {
         User user = getUserByUsername(username);
         if(user==null){
            throw new UsernameNotFoundException(username+"不存在");
-
        }
 
        return new org.springframework.security.core.userdetails.User(username,user.getEncryptedPassword(), Collections.emptyList());

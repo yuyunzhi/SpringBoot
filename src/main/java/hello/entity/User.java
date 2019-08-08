@@ -13,7 +13,7 @@ public class User {
     @JsonIgnore
     String encryptedPassword;
 
-    public User(Integer id, String username,String encryptedPassword) {
+    public User(int id, String username, String encryptedPassword) {
         this.id = id;
         this.username = username;
         this.avatar = "";
