@@ -57,8 +57,19 @@ class AuthControllerTest {
         });
     }
 
-    @Test
-    void testLogin(){
-
-    }
+//    @Test
+//    void testLogin() throws Exception {
+//        /*
+//           检查/auth的返回值，是否处于登录状态
+//         */
+//
+//        // 未登录   /auth接口返回未登录状态
+//        mvc.perform(get("/auth")).andExpect(status().isOk())
+//                .andExpect(mvcResult -> {
+//                    //System.out.println(mvcResult.getResponse().getContentAsString());
+//                    Assertions.assertTrue(mvcResult.getResponse().getContentAsString().contains("用户没有登录"));
+//                });
+//
+//        // 使用/auth/login登录
+//    }
 }
