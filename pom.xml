@@ -113,6 +113,12 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
+                <!-- 以下代码是为了排除某些文件的测试，比如集成测试-->
+                <configuration>
+                    <excludes>
+                        <exclude>**/*IntegrationTest</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <!--数据库持久化配置-->
@@ -126,11 +132,18 @@
                     <password>password</password>
                 </configuration>
             </plugin>
-            <!--&lt;!&ndash;用于集成测试&ndash;&gt;-->
-            <!--<plugin>-->
-                <!--<artifactId>maven-failsafe-plugin</artifactId>-->
-                <!--<version>2.22.2</version>-->
-            <!--</plugin>-->
+
+            <!--用于集成测试插件-->
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.2</version>
+                <!-- 以下代码是包含了以下文件，做集成测试-->
+                <configuration>
+                    <includes>
+                        <include>**/*IntegrationTest</include>
+                    </includes>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>
