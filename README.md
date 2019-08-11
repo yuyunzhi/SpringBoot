@@ -18,6 +18,8 @@ docker-compose --version
 docker-machine --version
 ```
 
+- 也可以直接到docker官网下载
+
 ## docker 下载并创建mysql
 - docker/mysql:https://hub.docker.com/_/mysql
 - 下载，创建
