@@ -1,6 +1,6 @@
 package hello.configuration;
 
-import hello.mapper.UserMapper;
+import hello.dao.UserMapper;
 import hello.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
