@@ -1,4 +1,4 @@
-# spring-boot
+# spring-boot开发多人在线博客平台
 
 **待更新中。。。**
 
@@ -72,3 +72,9 @@ mvn flyway:migrate
 - Controller 对请求的参数验证和清洗
 - Service 处理业务逻辑的方法
 - DAO  提供访问数据库系统所需操作的接口。DAO 模式的优势就在于它实现了两次隔离：隔离了数据访问代码和业务逻辑代码，隔离了不同数据库实现。
+
+## 单元测试、Travis CI
+
+- Controller单元测试:先看测试的那个类依赖了哪些类，然后mock它。在执行相关的测试函数的时候看看哪条执行语句使用了依赖的类的方法，就when().thenReturn。一个函数分支多少条，就可以写多少个测试用例
+- 博客模块使用TDD测试驱动开发，核心是先写必定会失败的测试代码
+- Travis CI:需要配置.travis.yml,当然也可以使用Circle CI
