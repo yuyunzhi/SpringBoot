@@ -25,7 +25,8 @@ docker-machine --version
 ```
 docker pull mysql
 //创建密码，同时创建一个名为abcd的数据库,同时mysql端口和本机的端口
-docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=abcd -p 3306:3306  -d mysql
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=xdml -p 3306:3306  -d mysql
+
 ```
 
 ## Flyway
